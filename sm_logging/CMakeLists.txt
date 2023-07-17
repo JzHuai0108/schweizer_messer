@@ -6,7 +6,7 @@ catkin_simple()
 
 find_package(Boost REQUIRED COMPONENTS system thread regex)
 include_directories(include ${Boost_INCLUDE_DIRS})
-add_definitions("-std=c++0x")
+add_definitions("-std=c++17")
 
 cs_add_library(${PROJECT_NAME} 
   src/Logger.cpp

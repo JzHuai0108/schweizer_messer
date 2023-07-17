@@ -4,7 +4,7 @@ project(sm_python)
 find_package(catkin_simple REQUIRED)
 catkin_simple()
 
-add_definitions(-std=c++0x -D__STRICT_ANSI__)
+add_definitions(-std=c++17 -D__STRICT_ANSI__)
 
 # Set up the python exports.
 SET(PY_PROJECT_NAME sm_python)
