@@ -6,6 +6,8 @@ catkin_simple()
 
 add_definitions(-std=c++0x -D__STRICT_ANSI__)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../python_module/cmake)
+include(add_python_export_library)
 # Set up the python exports.
 SET(PY_PROJECT_NAME sm_python)
 SET(PY_PACKAGE_DIR python/sm)
