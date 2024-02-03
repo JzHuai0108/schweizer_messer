@@ -5,8 +5,9 @@ find_package(catkin_simple REQUIRED)
 catkin_simple()
 
 find_package(Boost REQUIRED COMPONENTS system serialization)
+find_package(Eigen3 REQUIRED)
 
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
 
 ##############
 ## Building ##
