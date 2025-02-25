@@ -8,6 +8,8 @@
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/version.hpp>
+#include <boost/bind/bind.hpp>  // Correct header for bind in newer Boost versions
+using namespace boost::placeholders;  // Needed for _1, _2, etc.
 
 using boost::property_tree::json_parser::read_json;
 

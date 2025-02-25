@@ -1,12 +1,41 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(sm_random)
 
-find_package(catkin_simple REQUIRED)
-catkin_simple()
+# Use Ament
+find_package(ament_cmake REQUIRED)
 
-cs_add_library(${PROJECT_NAME}
+##################
+## Building ##
+##################
+
+add_library(${PROJECT_NAME} SHARED
   src/random.cpp
 )
 
-cs_install()
-cs_export()
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+ament_export_include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ament_export_libraries(${PROJECT_NAME})
+
+##################
+## Installation ##
+##################
+
+# Install library
+install(
+  TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# Install include files
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+# Finalize package
+ament_package()

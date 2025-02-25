@@ -1,16 +1,25 @@
 <?xml version="1.0"?>
-<package>
+<package format="3">
   <name>sm_timing</name>
   <version>0.0.1</version>
   <description>sm_timing</description>
 
   <maintainer email="paul.furgale@mavt.ethz.ch">Paul Furgale</maintainer>
-  <license>New BSD</license>
-  <buildtool_depend>catkin</buildtool_depend>
-  <buildtool_depend>catkin_simple</buildtool_depend>
+  <license>BSD-3-Clause</license>
+
+  <!-- Build Tool -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Build Dependencies -->
   <build_depend>sm_common</build_depend>
   <build_depend>sm_random</build_depend>
 
-  <run_depend>sm_common</run_depend>
-  <run_depend>sm_random</run_depend>
+  <!-- Execution Dependencies -->
+  <exec_depend>sm_common</exec_depend>
+  <exec_depend>sm_random</exec_depend>
+
+  <!-- Export Build Type -->
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

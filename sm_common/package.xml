@@ -1,13 +1,20 @@
 <?xml version="1.0"?>
-<package>
+<package format="3">
   <name>sm_common</name>
   <version>0.0.1</version>
   <description>sm_common</description>
 
   <maintainer email="paul.furgale@mavt.ethz.ch">Paul Furgale</maintainer>
-  <license>New BSD</license>
-  <buildtool_depend>catkin</buildtool_depend>
-  <buildtool_depend>catkin_simple</buildtool_depend>
+  <license>BSD-3-Clause</license>
 
-  <test_depend>gtest</test_depend>
+  <!-- Build Tool -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Testing Dependencies -->
+  <test_depend>ament_cmake_gtest</test_depend>
+
+  <!-- Export Build Type -->
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

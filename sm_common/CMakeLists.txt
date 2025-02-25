@@ -1,43 +1,78 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(sm_common)
 
-find_package(catkin_simple REQUIRED)
-catkin_simple()
-
+# Use Ament
+find_package(ament_cmake REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
-include_directories(${Boost_INCLUDE_DIRS})
 
-# enable warnings
+# Enable warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
-# enable C++17 support
-if(CMAKE_VERSION VERSION_LESS "3.1")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-else()
-  set(CMAKE_CXX_STANDARD 17)
-endif()
+# Enable C++17 support
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-cs_add_library(${PROJECT_NAME}
+# Define library
+add_library(${PROJECT_NAME} SHARED
   src/hash_id.cpp
   src/progress_info.cpp
 )
+
+# Link dependencies
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+
+# Set dependencies for the target
+ament_target_dependencies(${PROJECT_NAME} Boost)
+
+# Export dependencies
+ament_export_dependencies(Boost)
+ament_export_include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ament_export_libraries(${PROJECT_NAME})
+
+# Define include directories
+target_include_directories(${PROJECT_NAME} PUBLIC
+  ${Boost_INCLUDE_DIRS}
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
 
 #############
 ## Testing ##
 #############
 
-catkin_add_gtest(${PROJECT_NAME}-test
-  test/test_main.cpp
-  test/assert_macros.cpp
-  test/assert_macros_dbg.cpp
-  test/assert_macros_always_assert.cpp
-  test/maths.cpp
-  test/serialization_macros.cpp
-  test/numerical_comparisons.cpp
-  test/hash_id.cpp
-)
-target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
 
-cs_install()
-cs_export(CFG_EXTRAS export_flags.cmake)
+  ament_add_gtest(${PROJECT_NAME}-test
+    test/test_main.cpp
+    test/assert_macros.cpp
+    test/assert_macros_dbg.cpp
+    test/assert_macros_always_assert.cpp
+    test/maths.cpp
+    test/serialization_macros.cpp
+    test/numerical_comparisons.cpp
+    test/hash_id.cpp
+  )
+
+  target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
+endif()
+
+##################
+## Installation ##
+##################
+
+# Install library
+install(
+  TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# Install include files
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+# Finalize package
+ament_package()

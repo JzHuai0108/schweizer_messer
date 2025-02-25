@@ -1,21 +1,19 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(sm_property_tree)
 
-find_package(catkin_simple REQUIRED)
-catkin_simple()
-
+# Use Ament
+find_package(ament_cmake REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system filesystem)
+find_package(sm_common REQUIRED)
 
+# Remove old definitions and set strict ANSI compliance
 add_definitions(-D__STRICT_ANSI__)
-remove_definitions(-std=c++0x -std-c++11)
 
-include_directories(include ${Boost_INCLUDE_DIRS})
-
-##############
+##################
 ## Building ##
-##############
+##################
 
-cs_add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
   src/PropertyTree.cpp
   src/BoostPropertyTreeImplementation.cpp
   src/BoostPropertyTree.cpp
@@ -24,23 +22,56 @@ cs_add_library(${PROJECT_NAME}
   src/BoostPropertyTreeLoader.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} 
-                      ${Boost_LIBRARIES})
+# Link dependencies
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 
-cs_install()
-cs_export(LIBRARIES ${Boost_LIBRARIES})
+# Set dependencies for the target
+ament_target_dependencies(${PROJECT_NAME} Boost sm_common)
 
-#############
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+  ${Boost_INCLUDE_DIRS}
+)
+
+# Export dependencies
+ament_export_dependencies(Boost sm_common)
+ament_export_include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ament_export_libraries(${PROJECT_NAME})
+
+##################
 ## Testing ##
-#############
+##################
 
-if(CATKIN_ENABLE_TESTING)
-  catkin_add_gtest(${PROJECT_NAME}-test
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+
+  ament_add_gtest(${PROJECT_NAME}-test
     test/test_main.cpp
     test/BoostPropertyTreeImplementation.cpp
   )
+
   if(TARGET ${PROJECT_NAME}-test)
     target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
   endif()
 endif()
 
+##################
+## Installation ##
+##################
+
+# Install library
+install(
+  TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# Install include files
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+# Finalize package
+ament_package()

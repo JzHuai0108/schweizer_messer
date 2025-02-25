@@ -1,14 +1,19 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(sm_logging)
 
-find_package(catkin_simple REQUIRED)
-catkin_simple()
-
+# Use Ament
+find_package(ament_cmake REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system thread regex)
-include_directories(include ${Boost_INCLUDE_DIRS})
-add_definitions("-std=c++0x")
 
-cs_add_library(${PROJECT_NAME} 
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+##################
+## Building ##
+##################
+
+add_library(${PROJECT_NAME} SHARED
   src/Logger.cpp
   src/StdOutLogger.cpp
   src/LoggingEvent.cpp
@@ -18,24 +23,60 @@ cs_add_library(${PROJECT_NAME}
   src/Levels.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} 
-                      ${Boost_LIBRARIES})
+# Link dependencies
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 
-# Avoid clash with tr1::tuple: https://code.google.com/p/googletest/source/browse/trunk/README?r=589#257
-add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
+# Set dependencies for the target
+ament_target_dependencies(${PROJECT_NAME} Boost)
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+  ${Boost_INCLUDE_DIRS}
+)
+# Export dependencies
+ament_export_dependencies(Boost)
+ament_export_include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ament_export_libraries(${PROJECT_NAME})
 
-catkin_add_gtest(${PROJECT_NAME}-test 
-  test/test_main.cpp
-  test/logTest.cpp)
-if(TARGET ${PROJECT_NAME}-test)
-  target_link_libraries(${PROJECT_NAME}-test 
-    ${PROJECT_NAME}
-    pthread
+##################
+## Testing ##
+##################
+
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+
+  # Avoid clash with tr1::tuple
+  add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=0)
+
+  ament_add_gtest(${PROJECT_NAME}-test 
+    test/test_main.cpp
+    test/logTest.cpp
   )
+
+  if(TARGET ${PROJECT_NAME}-test)
+    target_link_libraries(${PROJECT_NAME}-test 
+      ${PROJECT_NAME}
+      pthread
+    )
+  endif()
 endif()
 
-cs_install()
-cs_export(
-  LIBRARIES ${Boost_LIBRARIES}
-  CFG_EXTRAS ${PROJECT_NAME}-extras.cmake
+##################
+## Installation ##
+##################
+
+# Install library
+install(
+  TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
 )
+
+# Install include files
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+# Finalize package
+ament_package()
