@@ -10,6 +10,6 @@
 
 TEST(SmCommonTestSuite,testAssertMacrosAlwaysAssert)
 {
-  SM_DEFINE_EXCEPTION(Exception, std::runtime_error);
+  SM_DEFINE_EXCEPTION(Exception, std::runtime_error)
   EXPECT_THROW( SM_ASSERT_TRUE_DBG(Exception, false, ""), Exception);
 }

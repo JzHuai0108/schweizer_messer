@@ -2,7 +2,9 @@
 #define SM_POINT_TEST_HARNESS_HPP
 
 #include <sm/eigen/gtest.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
+using namespace boost::placeholders;
+
 #include <sm/eigen/NumericalDiff.hpp>
 #include <sm/boost/serialization.hpp>
 

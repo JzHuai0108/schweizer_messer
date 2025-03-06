@@ -4,7 +4,8 @@
 #include <Eigen/Core>
 #include <sm/assert_macros.hpp>
 #include <boost/function.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
+using namespace boost::placeholders;
 
 namespace sm { namespace eigen {
 

@@ -5,7 +5,7 @@
 TEST(SmCommonTestSuite,testAssertMacros) 
 {
   
-  SM_DEFINE_EXCEPTION(Exception, std::runtime_error);
+  SM_DEFINE_EXCEPTION(Exception, std::runtime_error)
   
   {
     double* val = new double;

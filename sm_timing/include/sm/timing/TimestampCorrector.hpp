@@ -27,7 +27,7 @@ namespace sm {
     public:
       typedef TIME_T time_t;
 
-      SM_DEFINE_EXCEPTION(Exception, std::runtime_error);
+      SM_DEFINE_EXCEPTION(Exception, std::runtime_error)
       SM_DEFINE_EXCEPTION(TimeWentBackwardsException, Exception);
       SM_DEFINE_EXCEPTION(NotInitializedException, Exception);
 

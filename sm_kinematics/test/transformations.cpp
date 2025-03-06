@@ -21,7 +21,7 @@ struct TransformationFunctor
   }
 
 
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   TransformationFunctor(Eigen::Matrix4d T, Eigen::Vector4d v) : T_(T), v_(v){}
 
   value_t operator()(input_t const & dt)
@@ -51,7 +51,7 @@ struct InverseTransformationFunctor
   }
 
 
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   InverseTransformationFunctor(Eigen::Matrix4d T, Eigen::Vector4d v) : T_(T), v_(v){}
 
   value_t operator()(input_t const & dt)

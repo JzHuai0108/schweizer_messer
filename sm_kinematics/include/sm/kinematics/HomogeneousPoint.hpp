@@ -18,7 +18,7 @@ namespace sm {
     public:
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-      SM_DEFINE_EXCEPTION(Exception, std::runtime_error);
+      SM_DEFINE_EXCEPTION(Exception, std::runtime_error)
       
       typedef Eigen::Matrix3d euclidean_jacobian_t;
       typedef Eigen::Matrix<double,4,3> homogeneous_jacobian_t;
